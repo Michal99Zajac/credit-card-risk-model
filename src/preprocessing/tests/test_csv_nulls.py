@@ -1,43 +1,43 @@
+import numpy as np
 import pandas as pd
-import pytest
+
+from src.preprocessing.insert_nulls import insert_nulls
 
 
-@pytest.mark.parametrize(
-    "csv_file, percentage",
-    [
-        (
-            "./data/credit_card_approval.csv",
-            0.1,
-        )
-    ],
-)
-def test_percentage_of_nulls(csv_file, percentage):
+def test_insert_nulls():
     """
-    Test if the actual number of rows with exactly one null value matches the expected number.
+    Test the insert_nulls function to ensure it properly inserts null values into a DataFrame.
 
-    Args:
-        csv_file (str): Path to the input CSV file.
-        percentage (float): The expected percentage of rows with one null value.
-
-    Raises:
-        AssertionError: If the actual number of rows with one null value does not match the expected number.
+    This test will:
+    - Create a sample DataFrame.
+    - Call the insert_nulls function with specific parameters.
+    - Check if the output DataFrame has the correct number of null values inserted.
+    - Check if no row contains more than one null value.
+    - Check if excluded_columns are not altered.
     """
-    # Read the csv file into a DataFrame
-    data = pd.read_csv(csv_file)
+    # Create a sample DataFrame
+    data = {
+        "A": np.random.randint(-100, 100, size=1000),
+        "B": np.random.randint(-100, 100, size=1000),
+        "C": np.random.randint(-100, 100, size=1000),
+    }
+    df = pd.DataFrame(data)
 
-    # Calculate the total number of rows in the DataFrame
-    total_rows = len(data)
+    # Call the insert_nulls function
+    percentage = 0.4
+    excluded_columns = ["C"]
+    result_df = insert_nulls(df, percentage, excluded_columns)
 
-    # Create a boolean mask where True represents rows with exactly one null value
-    null_rows = data.isnull().sum(axis=1) == 1
-
-    # Calculate the expected number of rows with one null value based on the given percentage
-    expected_null_rows = int(total_rows * percentage)
-
-    # Calculate the actual number of rows with one null value using the boolean mask
-    actual_null_rows = null_rows.sum()
-
-    # Assert that the actual number of rows with one null value matches the expected number
+    # Check if the output DataFrame has the correct number of null values inserted
+    null_count = result_df.isnull().sum().sum()
+    expected_null_count = int(len(df) * percentage)
     assert (
-        actual_null_rows == expected_null_rows
-    ), f"Expected {expected_null_rows} rows with one null value, but found {actual_null_rows}"
+        null_count == expected_null_count
+    ), f"Expected {expected_null_count} null values, but got {null_count}"
+
+    # Check if no row contains more than one null value
+    for _, row in result_df.iterrows():
+        assert row.isnull().sum() <= 1, "A row contains more than one null value"
+
+    # Check if excluded_columns are not altered
+    assert not result_df["C"].isnull().any(), "Null values found in excluded column"
