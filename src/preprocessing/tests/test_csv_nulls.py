@@ -17,9 +17,9 @@ def test_insert_nulls():
     """
     # Create a sample DataFrame
     data = {
-        "A": np.random.randint(-100, 100, size=1000),
-        "B": np.random.randint(-100, 100, size=1000),
-        "C": np.random.randint(-100, 100, size=1000),
+        "A": np.random.randint(-100, 100, size=1023),
+        "B": np.random.randint(-100, 100, size=1023),
+        "C": np.random.randint(-100, 100, size=1023),
     }
     df = pd.DataFrame(data)
 
