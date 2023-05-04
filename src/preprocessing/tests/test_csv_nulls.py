@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.preprocessing.insert_nulls import insert_nulls
+from src.preprocessing.converting.insert_nulls import insert_nulls
 
 
 def test_insert_nulls():

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from src.preprocessing.to_enum import to_enum
+from src.preprocessing.converting.to_enum import to_enum
 
 # Define the original data as a pandas Series
 original_data = pd.Series(
@@ -29,10 +29,12 @@ value_mapping = {
 
 def test_to_enum():
     """
-    Test the to_enum function by comparing its output to an expected output.
+    Test the to_enum function to ensure it properly maps values to a specified enum.
 
-    Raises:
-        AssertionError: If the transformed data does not match the expected output.
+    This test will:
+    - Define the expected transformed data as a pandas Series.
+    - Apply the to_enum function to the original data using the value mapping.
+    - Assert that the transformed data matches the expected transformed data.
     """
     # Define the expected transformed data as a pandas Series
     expected_transformed_data = pd.Series([1, 2, 3, 4, 5, 2, 2, 5, 4])
