@@ -1,29 +1,34 @@
-import numpy as np
 import pandas as pd
+from sklearn.preprocessing import LabelEncoder
 
 
-def to_enum(data, mapping):
+def to_enum(df, column_to_encode):
     """
-    Transforms the input data based on the given value mapping.
+    Encode a categorical column of a given Pandas DataFrame using the LabelEncoder.
+
+    This function uses the `LabelEncoder` to transform the values in the specified `column_to_encode` to numerical
+    labels. It returns a new DataFrame with the encoded column and the original DataFrame with the specified column
+    dropped. It also returns the `LabelEncoder` object used to encode the column.
 
     Args:
-        data (pd.Series): A pandas Series containing the original data to be transformed.
-        mapping (dict): A dictionary defining the mapping between the original values
-                        and the desired enum values.
+        df (pandas.DataFrame): The DataFrame to encode.
+        column_to_encode (str): The name of the column to encode.
 
     Returns:
-        pd.Series: A pandas Series containing the transformed data.
+        tuple: A tuple of two pandas.DataFrames and a LabelEncoder object. The first DataFrame is the original DataFrame
+            with the specified column dropped and the encoded column added. The second DataFrame is a DataFrame
+            containing only the encoded column. The LabelEncoder object can be used to inverse_transform the labels
+            back to their original values.
     """
-    # Create a Series with the same index as the original data, filled with NaN values
-    enum_data = pd.Series(np.nan, index=data.index)
+    # Create a new LabelEncoder object
+    encoder = LabelEncoder()
 
-    # Apply the mapping to the original data
-    for original_value, enum_value in mapping.items():
-        enum_data[data == original_value] = enum_value
+    # Fit the encoder to the column to be encoded
+    encoder.fit(df[column_to_encode])
 
-    # Check if there are any unmatched values and print a warning if found
-    unmatched_values = data[enum_data.isna()].unique()
-    if len(unmatched_values) > 0:
-        print(f"Warning: Unmatched values found in the input data: {unmatched_values}")
+    # Encode the column and store the result in a new DataFrame
+    encoded_column = encoder.transform(df[column_to_encode])
+    enum_df = pd.DataFrame(encoded_column, columns=[column_to_encode])
 
-    return enum_data
+    # Return the encoded column DataFrame, and the LabelEncoder object
+    return pd.concat([df.drop(column_to_encode, axis=1), enum_df], axis=1), encoder

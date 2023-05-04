@@ -4,17 +4,21 @@ from sklearn.preprocessing import OneHotEncoder
 
 def to_binary_columns(df, columns_to_encode):
     """
-    Encode categorical columns of a Pandas DataFrame as binary columns.
+    Encode specified categorical columns of a given Pandas DataFrame using the OneHotEncoder.
 
-    This function uses the OneHotEncoder class from scikit-learn to encode each column in `columns_to_encode`
-    as a set of binary columns in the output DataFrame.
+    This function uses the `OneHotEncoder` to transform the values in the specified `columns_to_encode` to binary
+    columns. It returns a new DataFrame with the binary columns and the original DataFrame with the specified columns
+    dropped. It also returns the `OneHotEncoder` object used to encode the columns.
 
     Args:
         df (pandas.DataFrame): The DataFrame to encode.
         columns_to_encode (list): A list of column names to encode.
 
     Returns:
-        pandas.DataFrame: A new DataFrame containing only the specified columns encoded as binary columns.
+        tuple: A tuple of two pandas.DataFrames and a OneHotEncoder object. The first DataFrame is the original DataFrame
+            with the specified columns dropped and the binary columns added. The second DataFrame is a DataFrame
+            containing only the binary columns. The OneHotEncoder object can be used to inverse_transform the binary
+            columns back to their original values.
     """
     # Create an instance of the OneHotEncoder class
     encoder = OneHotEncoder(sparse_output=False, handle_unknown="ignore", dtype=int)
@@ -31,4 +35,4 @@ def to_binary_columns(df, columns_to_encode):
     )
 
     # Return the new DataFrame with the binary columns
-    return binary_df
+    return pd.concat([df.drop(columns_to_encode, axis=1), binary_df], axis=1), encoder
