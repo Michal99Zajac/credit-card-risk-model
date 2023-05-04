@@ -56,28 +56,3 @@ def insert_nulls(df, percentage=0.1, excluded_columns=None):
         null_inserted_rows.add(row_idx)
 
     return df
-
-
-if __name__ == "__main__":
-    # Read data from the CSV file
-    file_path = "../../data/orginal/credit_card_approval.csv"
-    data = pd.read_csv(file_path)
-
-    # Exclude "ID" and "TARGET" columns from being filled with null values
-    excluded_columns = [
-        "ID",
-        "TARGET",
-    ]
-
-    # Fill with null values
-    data_with_nulls = insert_nulls(
-        data,
-        percentage=0.1,
-        excluded_columns=excluded_columns,
-    )
-
-    # Save the data to a new CSV file
-    data_with_nulls.to_csv(
-        "../../data/credit_card_approval.csv",
-        index=False,
-    )
