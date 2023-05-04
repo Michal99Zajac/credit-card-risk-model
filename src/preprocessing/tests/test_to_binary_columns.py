@@ -14,16 +14,16 @@ def test_to_binary_columns():
     - Assert that the result DataFrame is equal to the expected DataFrame.
     """
     # Create a pandas Series with some sample data
-    sample_data = pd.Series(["a", "b", "c", "a", "b", "c"], name="category")
+    sample_data = pd.DataFrame({"category": ["a", "b", "c", "a", "b", "c"]})
 
     # Apply the to_binary_columns function on the sample data
-    result = to_binary_columns(sample_data)
+    result = to_binary_columns(sample_data, ["category"])
 
     # Create the expected DataFrame with binary columns
     expected_data = {
-        "has_a": [1, 0, 0, 1, 0, 0],
-        "has_b": [0, 1, 0, 0, 1, 0],
-        "has_c": [0, 0, 1, 0, 0, 1],
+        "category_a": [1, 0, 0, 1, 0, 0],
+        "category_b": [0, 1, 0, 0, 1, 0],
+        "category_c": [0, 0, 1, 0, 0, 1],
     }
     expected_result = pd.DataFrame(expected_data)
 
