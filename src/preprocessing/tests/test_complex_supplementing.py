@@ -1,5 +1,8 @@
 import pandas as pd
 
+from src.preprocessing.supplementing.complex.by_random_from_distribution import (
+    by_random_from_distribution,
+)
 from src.preprocessing.supplementing.complex.by_regression import by_regression
 
 
@@ -24,3 +27,22 @@ def test_by_regression():
 
     # Assert that the filled DataFrame is similar to the expected DataFrame
     pd.testing.assert_frame_equal(filled_df.round(), expected_df, check_dtype=False)
+
+
+def test_by_random_from_distribution():
+    """
+    Test the by_random_from_distribution function to ensure it properly fills missing values using variable distribution.
+
+    This test will:
+    - Create a sample DataFrame with missing values.
+    - Call the by_random_from_distribution function with specific columns.
+    - Check if the output DataFrame has no missing values.
+    """
+    # Create a test DataFrame
+    df = pd.DataFrame({"A": [1, 2, None, 4, None, 6], "B": [1, 2, 3, None, None, 6]})
+
+    # Use the by_regression function to fill missing values
+    filled_df = by_random_from_distribution(df, ["A"])
+
+    # Expected output after filling missing values
+    assert not filled_df["A"].isnull().any()
