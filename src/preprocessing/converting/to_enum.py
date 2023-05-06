@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
 
-def to_enum(df, column_to_encode):
+def to_enum(df: pd.DataFrame, column_to_encode: str):
     """
     Encode a categorical column of a given Pandas DataFrame using the LabelEncoder.
 
@@ -28,7 +28,7 @@ def to_enum(df, column_to_encode):
 
     # Encode the column and store the result in a new DataFrame
     encoded_column = encoder.transform(df[column_to_encode])
-    enum_df = pd.DataFrame(encoded_column, columns=[column_to_encode])
+    df[column_to_encode] = encoded_column
 
     # Return the encoded column DataFrame, and the LabelEncoder object
-    return pd.concat([df.drop(column_to_encode, axis=1), enum_df], axis=1), encoder
+    return df, encoder
