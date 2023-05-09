@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 
 
-def to_binary_columns(df, columns_to_encode):
+def to_binary_columns(df: pd.DataFrame, columns_to_encode):
     """
     Encode specified categorical columns of a given Pandas DataFrame using the OneHotEncoder.
 
