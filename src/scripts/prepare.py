@@ -2,6 +2,7 @@ import random
 
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 
 def insert_nulls(df, percentage=0.1, excluded_columns=None):
@@ -56,3 +57,28 @@ def insert_nulls(df, percentage=0.1, excluded_columns=None):
         null_inserted_rows.add(row_idx)
 
     return df
+
+
+if __name__ == "__main__":
+    file_path = "../../db/credit_card_approval.csv"
+    df = pd.read_csv(file_path)
+
+    # Get reduced dataset
+    _, df = train_test_split(df, stratify=df["TARGET"], test_size=0.1, random_state=42)
+    df = df.reset_index(drop=True)
+
+    # Exclude "ID" and "TARGET" columns from being filled with null values
+    excluded_columns = [
+        "ID",
+        "TARGET",
+    ]
+
+    # Fill with null values
+    df = insert_nulls(
+        df,
+        percentage=0.1,
+        excluded_columns=excluded_columns,
+    )
+
+    # Save the data to a CSV file
+    df.to_csv(file_path, index=False)

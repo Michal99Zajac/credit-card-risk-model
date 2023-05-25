@@ -30,6 +30,5 @@ Thumbs.db
 # pytest
 .pytest_cache
 
-# data
-data
-!data/orginal
+db/
+!db/credit_card_approval.csv
