@@ -1,6 +1,8 @@
+import os
 import random
 
 import numpy as np
+import opendatasets as od
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
@@ -60,8 +62,20 @@ def insert_nulls(df, percentage=0.1, excluded_columns=None):
 
 
 if __name__ == "__main__":
-    file_path = "../../db/credit_card_approval.csv"
-    df = pd.read_csv(file_path)
+    # Change the working directory to the root of the project
+    os.chdir(os.path.join(os.path.dirname(__file__), "../.."))
+
+    # Set the URL of the dataset
+    dataset_url = "https://www.kaggle.com/datasets/laotse/credit-card-approval/download?datasetVersionNumber=6"
+
+    # Download the dataset
+    result = od.download(dataset_url, "db", force=True)
+
+    # Get the path to the downloaded dataset
+    csv_file = "./db/credit-card-approval/credit_card_approval.csv"
+
+    # Read the dataset into a Pandas DataFrame
+    df = pd.read_csv(csv_file)
 
     # Get reduced dataset
     _, df = train_test_split(df, stratify=df["TARGET"], test_size=0.1, random_state=42)
@@ -81,4 +95,4 @@ if __name__ == "__main__":
     )
 
     # Save the data to a CSV file
-    df.to_csv(file_path, index=False)
+    df.to_csv(csv_file, index=False)
