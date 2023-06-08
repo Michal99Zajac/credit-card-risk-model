@@ -15,6 +15,7 @@ scikit-learn = "^1.2.2"
 seaborn = "^0.12.2"
 opendatasets = "^0.1.22"
 xgboost = "^1.7.5"
+optuna = "^3.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
