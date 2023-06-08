@@ -38,4 +38,4 @@ def by_regression(df: DataFrame, columns: list[str]):
         # Fill in the missing values
         df.loc[missing, column] = y_missing
 
-        return df
+    return df
